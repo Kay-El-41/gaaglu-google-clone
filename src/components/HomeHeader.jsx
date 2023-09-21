@@ -13,7 +13,7 @@ export default function HomeHeader() {
           Glu-Images
         </Link>
       </div>
-      <TbGridDots className="bg-transparent hover:bg-gray-200 rounded-full text-4xl p-2" />
+      <TbGridDots className="bg-transparent cursor-pointer hover:bg-gray-200 rounded-full text-4xl p-2" />
       <button className="bg-blue-500 hover:shadow-md transition-shadow text-white px-6 py-2 font-medium rounded-md hover:brightness-105">
         Sign in
       </button>
