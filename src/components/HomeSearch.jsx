@@ -1,14 +1,29 @@
 "use client"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { AiOutlineSearch } from "react-icons/ai"
 import { BsFillMicFill } from "react-icons/bs"
 import Image from "next/image"
 
 export default function HomeSearch() {
-  const [input, setInput] = useState("")
-  const [isRandomSearchLoading, setIsRandomSearchLoading] = useState(false)
   const router = useRouter()
+  const [input, setInput] = useState("")
+  const [randomWord, setRandomWord] = useState("Hello World")
+  const [isVoiceListening, setIsVoiceListening] = useState(false)
+  const [isRandomSearchLoading, setIsRandomSearchLoading] = useState(false)
+
+  useEffect(() => {
+    fetchRandomWord()
+  }, [])
+
+  const fetchRandomWord = async () => {
+    setIsRandomSearchLoading(true)
+    const response = await fetch("https://random-word-api.herokuapp.com/word")
+      .then((res) => res.json())
+      .then((data) => data[0])
+    setRandomWord(response)
+    setIsRandomSearchLoading(false)
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -16,14 +31,31 @@ export default function HomeSearch() {
     router.push(`/search/web?searchTerm=${input}`)
   }
 
-  const handleRandomSearch = async () => {
-    setIsRandomSearchLoading(true)
-    const response = await fetch("https://random-word-api.herokuapp.com/word")
-      .then((res) => res.json())
-      .then((data) => data[0])
-    if (!response) return
-    router.push(`/search/web?searchTerm=${response}`)
-    setIsRandomSearchLoading(false)
+  const handleRandomSearch = () => {
+    router.push(`/search/web?searchTerm=${randomWord}`)
+  }
+
+  const handleVoiceSearch = () => {
+    // This function uses the speech recognition api from browser.
+    const voiceRecognitionAPI =
+      window.SpeechRecognition || window.webkitSpeechRecognition
+    const voiceRecognitionListener = new voiceRecognitionAPI()
+
+    // You need two functions to handle voice recognition
+
+    // 1. onStart handler that will record the voice
+    voiceRecognitionListener.onstart = () => {
+      setIsVoiceListening(true)
+    }
+    // 2. onResult handler that will transcript the voice
+    voiceRecognitionListener.onresult = (e) => {
+      const transcript = e.results[0][0].transcript?.replace(".", "")
+      // the transcript contain a lot of '.', remove this for better UX
+      setInput(transcript)
+      setIsVoiceListening(false)
+    }
+    // And finally start the voice recognition API
+    voiceRecognitionListener.start()
   }
 
   return (
@@ -39,7 +71,17 @@ export default function HomeSearch() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
-        <BsFillMicFill className="text-lg text-gray-500 ml-3" />
+
+        {isVoiceListening && (
+          <span className="text-sm text-gray-500">Listening...</span>
+        )}
+        <div className="cursor-pointer" onClick={handleVoiceSearch}>
+          <BsFillMicFill
+            className={`text-lg  ml-3 ${
+              isVoiceListening ? "text-blue-500" : "text-gray-500"
+            }`}
+          />
+        </div>
       </form>
 
       <div className="flex mt-8 flex-col space-y-2 sm:space-y-0 sm:space-x-4 sm:flex-row justify-center">
@@ -49,6 +91,7 @@ export default function HomeSearch() {
         <button
           onClick={handleRandomSearch}
           className="btn flex justify-center items-center"
+          disabled={isRandomSearchLoading}
         >
           {isRandomSearchLoading ? (
             <Image
