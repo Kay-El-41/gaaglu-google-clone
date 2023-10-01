@@ -31,7 +31,7 @@ export default function SearchHeaderOptions() {
       <div
         onClick={() => selectTab("Images")}
         className={`${
-          pathname === "/search/imageGg" && "!text-blue-600 !border-blue-600"
+          pathname === "/search/image" && "!text-blue-600 !border-blue-600"
         } flex items-center space-x-1 border-b-4 border-transparent active:text-blue-500 cursor-pointer pb-3 px-2`}
       >
         <AiOutlineCamera className="text-md" />
