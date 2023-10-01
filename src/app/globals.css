@@ -10,4 +10,9 @@
   .links {
     @apply hover:underline cursor-pointer text-center;
   }
+
+  .search-headers-icons {
+   @apply bg-transparent hover:bg-gray-200 p-2 text-4xl cursor-pointer rounded-full;
+
+  }
 }

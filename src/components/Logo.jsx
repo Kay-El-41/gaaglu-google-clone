@@ -2,7 +2,7 @@ import React from "react"
 
 export default function Logo({ fontSize = "text-8xl" }) {
   return (
-    <div className={`${fontSize} select-none`}>
+    <div className={`${fontSize} font-semibold select-none`}>
       <span className="text-blue-500">G</span>
       <span className="text-red-500">a</span>
       <span className="text-yellow-500">a</span>

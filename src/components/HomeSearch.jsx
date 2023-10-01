@@ -62,12 +62,14 @@ export default function HomeSearch() {
     <>
       <form
         onSubmit={handleSubmit}
-        className="flex w-full mt-8 mx-auto items-center max-w-[90%] sm:max-w-xl lg:max-w-2xl border border-gray-200 focus-within:shadow-md px-5 py-3 rounded-full hover:shadow-md transition-shadow"
+        className="flex w-full max-w-[90%] justify-between  mt-8 mx-auto items-center overflow-hidden sm:max-w-xl lg:max-w-2xl border border-gray-200 focus-within:shadow-md px-5 py-3 rounded-full hover:shadow-md transition-shadow"
       >
-        <AiOutlineSearch className="text-xl text-gray-500 mr-3" />
+        <div>
+          <AiOutlineSearch className="text-xl text-gray-500 mr-3" />
+        </div>
         <input
           type="text"
-          className="flex-grow focus:outline-none"
+          className="w-full focus:outline-none"
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
@@ -75,9 +77,9 @@ export default function HomeSearch() {
         {isVoiceListening && (
           <span className="text-sm text-gray-500">Listening...</span>
         )}
-        <div className="cursor-pointer" onClick={handleVoiceSearch}>
+        <div className="cursor-pointer ml-3" onClick={handleVoiceSearch}>
           <BsFillMicFill
-            className={`text-lg  ml-3 ${
+            className={`text-lg ${
               isVoiceListening ? "text-blue-500" : "text-gray-500"
             }`}
           />
